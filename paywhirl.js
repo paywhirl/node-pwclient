@@ -40,6 +40,21 @@ module.exports = class PayWhirl {
         return this.getPromise_(`/customer/${ customerId }`);
     }
 
+    // return all addresses associated with a customer Id
+    getAddresses(customerId = null) {
+        return this.getPromise_(`/customer/addresses/${ customerId }`);
+    }
+
+    // return a single address based on address Id
+    getAddress(addressId = null) {
+        return this.getPromise_(`/customer/address/${ addressId }`);
+    }
+
+    // return the full customer profile (customer, addresses, and profile questions)
+    getProfile(customerId = null) {
+        return this.getPromise_(`/customer/profile/${ customerId }`);
+    }
+
     createCustomer(data = null) {
         return this.postPromise_('/create/customer', data);
     }
@@ -110,8 +125,23 @@ module.exports = class PayWhirl {
         return this.getPromise_(`/invoice/${ customerId }`);
     }
 
-    getInvoices(customerId = null) {
-        return this.getPromise_(`/invoices/${ customerId }`);
+    getInvoices(customerId = null, data = null) {
+        return this.getPromise_(`/invoices/${ customerId }`, data);
+    }
+
+    processInvoice(invoiceId = null) {
+        return this.postPromise_(`/invoices/${ invoiceId }/process`);
+    }
+
+    updateInvoiceCard(invoiceId = null, cardId = null) {
+        let data = {
+            card_id: cardId,
+        };
+        return this.postPromise_(`/invoices/${ invoiceId }/card`, data);
+    }
+
+    createInvoice(data = null) {
+        return this.postPromise_(`/invoices/`, data);
     }
 
     getGateways() {
