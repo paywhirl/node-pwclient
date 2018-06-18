@@ -174,6 +174,10 @@ module.exports = class PayWhirl {
         return this.getPromise_(`/email/${ customerId }`);
     }
 
+    sendEmail(request = null) {
+        return this.postPromise_(`/send-email`, request);
+    }
+
     getAccount() {
         return this.getPromise_('/account');
     }
