@@ -107,12 +107,16 @@ module.exports = class PayWhirl {
         return this.postPromise_('/subscribe/customer', customerData);
     }
 
-    updateSubscription(subscriptionId = null, planId = null) {
+    updateSubscription(subscriptionId = null, planId = null, quantity = null) {
         let data = {
             subscription_id: subscriptionId,
             plan_id: planId,
         };
 
+        if (quantity) {
+            data.quantity = quantity;
+        }
+        
         return this.postPromise_('/update/subscription', data);
     }
 
