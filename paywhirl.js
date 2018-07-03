@@ -116,7 +116,7 @@ module.exports = class PayWhirl {
         if (quantity) {
             data.quantity = quantity;
         }
-        
+
         return this.postPromise_('/update/subscription', data);
     }
 
@@ -144,6 +144,9 @@ module.exports = class PayWhirl {
         return this.postPromise_(`/invoices/${ invoiceId }/card`, data);
     }
 
+    updateInvoiceItems(invoiceId = null, lineItems = null) {
+        return this.postPromise_(`/invoices/${ invoiceId }/items`, lineItems);
+    }
     createInvoice(data = null) {
         return this.postPromise_(`/invoices/`, data);
     }
