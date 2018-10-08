@@ -148,7 +148,7 @@ module.exports = class PayWhirl {
         return this.postPromise_(`/invoices/${ invoiceId }/items`, lineItems);
     }
     createInvoice(data = null) {
-        return this.postPromise_(`/invoices/`, data);
+        return this.postPromise_(`/invoices`, data);
     }
 
     getGateways() {
