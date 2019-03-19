@@ -55,6 +55,10 @@ module.exports = class PayWhirl {
         return this.getPromise_(`/customer/profile/${ customerId }`);
     }
 
+    authCustomer(email = null, password = null) {
+        return this.postPromise_('/auth/customer', {email: email, password: password});
+    }
+
     createCustomer(data = null) {
         return this.postPromise_('/create/customer', data);
     }
