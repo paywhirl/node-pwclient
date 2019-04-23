@@ -141,6 +141,10 @@ module.exports = class PayWhirl {
         return this.postPromise_(`/invoices/${ invoiceId }/process`);
     }
 
+    markInvoiceAsPaid(invoiceId = null) {
+        return this.postPromise_(`/invoices/${ invoiceId }/mark-as-paid`);
+    }
+
     updateInvoiceCard(invoiceId = null, cardId = null) {
         let data = {
             card_id: cardId,
