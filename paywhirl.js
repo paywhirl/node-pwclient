@@ -171,8 +171,12 @@ module.exports = class PayWhirl {
         return this.postPromise_('/create/charge', data);
     }
 
-    getCharge(customerId = null) {
-        return this.getPromise_(`/charge/${ customerId }`);
+    getCharge(chargeId = null) {
+        return this.getPromise_(`/charge/${ chargeId }`);
+    }
+
+    refundCharge(chargeId = null, data = null) {
+        return this.postPromise_(`/refund/charge/${ chargeId }`, data);
     }
 
     getCard(customerId = null) {
