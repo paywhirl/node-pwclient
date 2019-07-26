@@ -67,6 +67,17 @@ module.exports = class PayWhirl {
         return this.postPromise_('/update/customer', data);
     }
 
+    deleteCustomer(customerId = null, forget = null) {
+        let data = null;
+        if (customerId) {
+            data = {id: customerId};
+        }
+        if (forget !== null) {
+            data['forget'] = forget;
+        }
+        return this.postPromise_(`/delete/customer`, data);
+    }
+
     updateAnswer(data = null) {
         return this.postPromise_('/update/answer', data);
     }
