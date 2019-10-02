@@ -156,6 +156,15 @@ module.exports = class PayWhirl {
         return this.postPromise_(`/invoices/${ invoiceId }/mark-as-paid`);
     }
 
+    addPromoCodeToInvoice(invoiceId = null, promoCode = null) {
+        let data = {promo_code: promoCode}
+        return this.postPromise_(`/invoices/${ invoiceId }/add-promo`, data);
+    }
+
+    removePromoCodeFromInvoice(invoiceId = null) {
+        return this.postPromise_(`/invoices/${ invoiceId }/remove-promo`);
+    }
+
     updateInvoiceCard(invoiceId = null, cardId = null) {
         let data = {
             card_id: cardId,
