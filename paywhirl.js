@@ -179,6 +179,13 @@ module.exports = class PayWhirl {
         return this.postPromise_(`/invoices`, data);
     }
 
+    deleteInvoice(invoiceID = null) {
+        let data = {
+            id: invoiceID,
+        };
+        return this.postPromise_(`/delete/invoice`, data);
+    }
+
     getGateways() {
         return this.getPromise_('/gateways');
     }
