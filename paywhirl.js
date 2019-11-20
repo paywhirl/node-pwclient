@@ -122,7 +122,7 @@ module.exports = class PayWhirl {
         return this.postPromise_('/subscribe/customer', customerData);
     }
 
-    updateSubscription(subscriptionId = null, planId = null, quantity = null) {
+    updateSubscription(subscriptionId = null, planId = null, quantity = null, addressId = null, installmentsLeft = null, trialEnd = null, cardId = null) {
         let data = {
             subscription_id: subscriptionId,
             plan_id: planId,
@@ -130,6 +130,18 @@ module.exports = class PayWhirl {
 
         if (quantity) {
             data.quantity = quantity;
+        }
+        if (addressId) {
+            data.address_id = addressId;
+        }
+        if (installmentsLeft) {
+            data.installments_left = installmentsLeft;
+        }
+        if (trialEnd) {
+            data.trial_end = trialEnd;
+        }
+        if (cardId) {
+            data.card_id = cardId;
         }
 
         return this.postPromise_('/update/subscription', data);
