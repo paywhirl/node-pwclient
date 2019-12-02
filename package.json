@@ -1,0 +1,25 @@
+{
+  "name": "pwclient",
+  "version": "1.0.0",
+  "description": "JavaScript client for the PayWhirl API",
+  "main": "paywhirl.js",
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "querystring": "^0.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paywhirl/node-pwclient.git"
+  },
+  "author": "PayWhirl",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/paywhirl/node-pwclient/issues"
+  },
+  "homepage": "https://github.com/paywhirl/node-pwclient"
+}
