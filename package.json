@@ -12,6 +12,9 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2"
   },
+  "scripts": {
+    "lint": "eslint paywhirl.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/paywhirl/node-pwclient.git"
