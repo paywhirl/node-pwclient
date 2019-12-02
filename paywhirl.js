@@ -23,13 +23,17 @@
 
 const fetch = require('node-fetch');
 const querystring = require('querystring');
+const https = require('https');
 
 module.exports = class PayWhirl {
-    constructor(APIKey, APISecret) {
-        this.host_ = 'https://api.paywhirl.com';
+    constructor(APIKey, APISecret, host = 'https://api.paywhirl.com', rejectUnauthorized = true) {
+        this.host_ = host;
         this.headers_ = new fetch.Headers();
         this.headers_.append('api_key', APIKey);
         this.headers_.append('api_secret', APISecret);
+        this.httpsAgent_ = new https.Agent({
+            rejectUnauthorized,
+        });
     }
 
     getCustomers(data = null) {
@@ -310,6 +314,7 @@ module.exports = class PayWhirl {
             method: requestType,
             headers: this.headers_,
             port: this.port_,
+            agent: this.httpsAgent_,
         };
 
         const request = new fetch.Request(host, init);
