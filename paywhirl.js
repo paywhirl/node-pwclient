@@ -26,11 +26,10 @@ const querystring = require('querystring');
 const https = require('https');
 
 module.exports = class PayWhirl {
-    constructor(APIKey, APISecret, host = 'https://api.paywhirl.com', rejectUnauthorized = true) {
+    constructor(apiKey, apiSecret, host = 'https://api.paywhirl.com', rejectUnauthorized = true) {
         this._host = host;
-        this._headers = new fetch.Headers();
-        this._headers.append('api_key', APIKey);
-        this._headers.append('api_secret', APISecret);
+        this._apiKey = apiKey;
+        this._apiSecret = apiSecret;
         this._httpsAgent = new https.Agent({
             rejectUnauthorized,
         });
@@ -309,9 +308,13 @@ module.exports = class PayWhirl {
             host = `${host}?${qs}`;
         }
 
+        const headers = new fetch.Headers();
+        headers.append('api-key', this._apiKey);
+        headers.append('api-secret', this._apiSecret);
+
         const init = {
             method: method,
-            headers: this._headers,
+            headers: headers,
             port: this._port,
             agent: this._httpsAgent,
         };
