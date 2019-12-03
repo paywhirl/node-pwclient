@@ -20,110 +20,114 @@
  * Dependencies:
  * node-fetch and querystring can be obtained via npm
  */
-'use strict';
+
 const fetch = require('node-fetch');
 const querystring = require('querystring');
+const https = require('https');
 
 module.exports = class PayWhirl {
-    constructor(APIKey, APISecret) {
-        this.host_ = 'https://api.paywhirl.com';
-        this.headers_ = new fetch.Headers();
-        this.headers_.append('api_key', APIKey);
-        this.headers_.append('api_secret', APISecret);
+    constructor(apiKey, apiSecret, host = 'https://api.paywhirl.com', rejectUnauthorized = true) {
+        this._host = host;
+        this._apiKey = apiKey;
+        this._apiSecret = apiSecret;
+        this._httpsAgent = new https.Agent({
+            rejectUnauthorized,
+        });
     }
 
     getCustomers(data = null) {
-        return this.getPromise_('/customers', data);
+        return this._get('/customers', data);
     }
 
     getCustomer(customerId = null) {
-        return this.getPromise_(`/customer/${ customerId }`);
+        return this._get(`/customer/${customerId}`);
     }
 
     // return all addresses associated with a customer Id
     getAddresses(customerId = null) {
-        return this.getPromise_(`/customer/addresses/${ customerId }`);
+        return this._get(`/customer/addresses/${customerId}`);
     }
 
     // return a single address based on address Id
     getAddress(addressId = null) {
-        return this.getPromise_(`/customer/address/${ addressId }`);
+        return this._get(`/customer/address/${addressId}`);
     }
 
     // return the full customer profile (customer, addresses, and profile questions)
     getProfile(customerId = null) {
-        return this.getPromise_(`/customer/profile/${ customerId }`);
+        return this._get(`/customer/profile/${customerId}`);
     }
 
     authCustomer(email = null, password = null) {
-        return this.postPromise_('/auth/customer', {email: email, password: password});
+        return this._post('/auth/customer', { email, password });
     }
 
     createCustomer(data = null) {
-        return this.postPromise_('/create/customer', data);
+        return this._post('/create/customer', data);
     }
 
     updateCustomer(data = null) {
-        return this.postPromise_('/update/customer', data);
+        return this._post('/update/customer', data);
     }
 
     deleteCustomer(customerId = null, forget = null) {
         let data = null;
         if (customerId) {
-            data = {id: customerId};
+            data = { id: customerId };
         }
         if (forget !== null) {
-            data['forget'] = forget;
+            data.forget = forget;
         }
-        return this.postPromise_(`/delete/customer`, data);
+        return this._post('/delete/customer', data);
     }
 
     updateAnswer(data = null) {
-        return this.postPromise_('/update/answer', data);
+        return this._post('/update/answer', data);
     }
 
     getQuestions(data = null) {
-        return this.getPromise_('/questions', data);
+        return this._get('/questions', data);
     }
 
     getAnswers(data = null) {
-        return this.getPromise_('/answers', data);
+        return this._get('/answers', data);
     }
 
     getPlans(data = null) {
-        return this.getPromise_('/plans', data);
+        return this._get('/plans', data);
     }
 
     getPlan(customerId = null) {
-        return this.getPromise_(`/plan/${ customerId }`);
+        return this._get(`/plan/${customerId}`);
     }
 
     createPlan(data = null) {
-        return this.postPromise_('/create/plan', data);
+        return this._post('/create/plan', data);
     }
 
     updatePlan(data = null) {
-        return this.postPromise_('/update/plan', data);
+        return this._post('/update/plan', data);
     }
 
     getSubscriptions(customerId = null) {
-        return this.getPromise_(`/subscriptions/${ customerId }`);
+        return this._get(`/subscriptions/${customerId}`);
     }
 
     getSubscription(customerId = null) {
-        return this.getPromise_(`/subscription/${ customerId }`);
+        return this._get(`/subscription/${customerId}`);
     }
 
     getSubscribers(data = null) {
-        return this.getPromise_('/subscribers', data);
+        return this._get('/subscribers', data);
     }
 
     subscribeCustomer(customerData) {
-        return this.postPromise_('/subscribe/customer', customerData);
+        return this._post('/subscribe/customer', customerData);
     }
 
-    updateSubscription(subscriptionId = null, planId = null, quantity = null, addressId = null, installmentsLeft = null, trialEnd = null, cardId = null) {
-        let data = {
+    updateSubscription(subscriptionId = null, planId = null, quantity = null, addressId = null,
+        installmentsLeft = null, trialEnd = null, cardId = null) {
+        const data = {
             subscription_id: subscriptionId,
             plan_id: planId,
         };
@@ -144,196 +148,188 @@ module.exports = class PayWhirl {
             data.card_id = cardId;
         }
 
-        return this.postPromise_('/update/subscription', data);
+        return this._post('/update/subscription', data);
     }
 
     unsubscribeCustomer(subscriptionId = null) {
-        let data = {subscription_id: subscriptionId};
-        return this.postPromise_('/unsubscribe/customer', data);
+        const data = { subscription_id: subscriptionId };
+        return this._post('/unsubscribe/customer', data);
     }
 
     getInvoice(customerId = null) {
-        return this.getPromise_(`/invoice/${ customerId }`);
+        return this._get(`/invoice/${customerId}`);
     }
 
     getInvoices(customerId = null, data = null) {
-        return this.getPromise_(`/invoices/${ customerId }`, data);
+        return this._get(`/invoices/${customerId}`, data);
     }
 
     processInvoice(invoiceId = null, data = null) {
-        return this.postPromise_(`/invoices/${ invoiceId }/process`, data);
+        return this._post(`/invoice/${invoiceId}/process`, data);
     }
 
     markInvoiceAsPaid(invoiceId = null) {
-        return this.postPromise_(`/invoices/${ invoiceId }/mark-as-paid`);
+        return this._post(`/invoice/${invoiceId}/mark-as-paid`);
     }
 
     addPromoCodeToInvoice(invoiceId = null, promoCode = null) {
-        let data = {promo_code: promoCode}
-        return this.postPromise_(`/invoices/${ invoiceId }/add-promo`, data);
+        const data = { promo_code: promoCode };
+        return this._post(`/invoice/${invoiceId}/add-promo`, data);
     }
 
     removePromoCodeFromInvoice(invoiceId = null) {
-        return this.postPromise_(`/invoices/${ invoiceId }/remove-promo`);
+        return this._post(`/invoice/${invoiceId}/remove-promo`);
     }
 
     updateInvoiceCard(invoiceId = null, cardId = null) {
-        let data = {
+        const data = {
             card_id: cardId,
         };
-        return this.postPromise_(`/invoices/${ invoiceId }/card`, data);
+        return this._post(`/invoice/${invoiceId}/card`, data);
     }
 
     updateInvoiceItems(invoiceId = null, lineItems = null) {
-        return this.postPromise_(`/invoices/${ invoiceId }/items`, lineItems);
+        return this._post(`/invoice/${invoiceId}/items`, lineItems);
     }
+
     createInvoice(data = null) {
-        return this.postPromise_(`/invoices`, data);
+        return this._post('/invoices', data);
     }
 
     deleteInvoice(invoiceID = null) {
-        let data = {
+        const data = {
             id: invoiceID,
         };
-        return this.postPromise_(`/delete/invoice`, data);
+        return this._post('/delete/invoice', data);
     }
 
     getGateways() {
-        return this.getPromise_('/gateways');
+        return this._get('/gateways');
     }
 
     getGateway(customerId = null) {
-        return this.getPromise_(`/gateway/${ customerId }`);
+        return this._get(`/gateway/${customerId}`);
     }
 
     createCharge(data = null) {
-        return this.postPromise_('/create/charge', data);
+        return this._post('/create/charge', data);
     }
 
     getCharge(chargeId = null) {
-        return this.getPromise_(`/charge/${ chargeId }`);
+        return this._get(`/charge/${chargeId}`);
     }
 
     refundCharge(chargeId = null, data = null) {
-        return this.postPromise_(`/refund/charge/${ chargeId }`, data);
+        return this._post(`/refund/charge/${chargeId}`, data);
     }
 
     getCard(customerId = null) {
-        return this.getPromise_(`/card/${ customerId }`);
+        return this._get(`/card/${customerId}`);
     }
 
     getCards(customerId = null) {
-        return this.getPromise_(`/cards/${ customerId }`);
+        return this._get(`/cards/${customerId}`);
     }
 
     createCard(data = null) {
-        return this.postPromise_('/create/card', data);
+        return this._post('/create/card', data);
     }
 
     deleteCard(cardID = null) {
         let data = null;
         if (cardID) {
-            data = {id: cardID};
+            data = { id: cardID };
         }
-        return this.postPromise_(`/delete/card`, data);
+        return this._post('/delete/card', data);
     }
 
     getPromos() {
-        return this.getPromise_(`/promo`);
+        return this._get('/promo');
     }
 
     getPromo(customerId = null) {
-        return this.getPromise_(`/promo/${ customerId }`);
+        return this._get(`/promo/${customerId}`);
     }
 
     createPromo(data = null) {
-        return this.postPromise_('/create/promo', data);
+        return this._post('/create/promo', data);
     }
 
     deletePromo(promoID = null) {
         let data = null;
         if (promoID) {
-            data = {id: promoID};
+            data = { id: promoID };
         }
-        return this.postPromise_(`/delete/promo`, data);
+        return this._post('/delete/promo', data);
     }
 
     getEmailTemplate(customerId = null) {
-        return this.getPromise_(`/email/${ customerId }`);
+        return this._get(`/email/${customerId}`);
     }
 
     sendEmail(request = null) {
-        return this.postPromise_(`/send-email`, request);
+        return this._post('/send-email', request);
     }
 
     getAccount() {
-        return this.getPromise_('/account');
+        return this._get('/account');
     }
 
     getStats() {
-        return this.getPromise_('/stats');
+        return this._get('/stats');
     }
 
     getShippingRules() {
-        return this.getPromise_(`/shipping`);
+        return this._get('/shipping');
     }
 
     getShippingRule(ruleID = null) {
-        return this.getPromise_(`/shipping/${ ruleID }`);
+        return this._get(`/shipping/${ruleID}`);
     }
 
     getTaxRules() {
-        return this.getPromise_(`/tax`);
+        return this._get('/tax');
     }
 
     getTaxRule(customerId = null) {
-        return this.getPromise_(`/tax/${ customerId }`);
+        return this._get(`/tax/${customerId}`);
     }
 
     getMultiAuthToken(data = null) {
-        return this.postPromise_('/multiauth', data);
+        return this._post('/multiauth', data);
     }
-
 
     // private helper methods below this point
-    requestHelper_(requestType, uriEndpoint, data = null) {
-        let qs = '';
-        let host = this.host_ + uriEndpoint;
-        if (data) {
-            qs = querystring.stringify(data);
-            host = host + '?' + qs;
+    _request(method, endpoint, data = null) {
+        const qs = data ? querystring.stringify(data) : null;
+        const path = (method === 'GET' && qs) ? `${endpoint}?${qs}` : endpoint;
+        const url = `${this._host}${path}`;
+
+        const headers = new fetch.Headers();
+        headers.append('api-key', this._apiKey);
+        headers.append('api-secret', this._apiSecret);
+        if (method === 'POST') {
+            headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
         }
 
-        let init = {
-            method: requestType,
-            headers: this.headers_,
-            port: this.port_,
+        const opts = {
+            method,
+            headers,
+            port: this._port,
+            agent: this._httpsAgent,
+            body: method === 'POST' ? qs : null,
         };
 
-        let request = new fetch.Request(host, init);
-        return fetch(request);
+        const request = new fetch.Request(url, opts);
+
+        return fetch(request).then((res) => res.json());
     }
 
-
-    promiseBuilder_(requestType, uriEndpoint, data = null) {
-        let returnPromise = new Promise((resolved, failed) => {
-        this.requestHelper_(requestType, uriEndpoint, data)
-            .then((result) => {
-                resolved(result.json());
-            })
-            .catch((error) => {
-                failed(error);
-            });
-        });
-
-        return returnPromise;
+    _post(endpoint, data = null) {
+        return this._request('POST', endpoint, data);
     }
 
-    postPromise_(uriEndpoint, data = null) {
-        return this.promiseBuilder_('POST', uriEndpoint, data);
-    }
-
-    getPromise_(uriEndpoint, data = null) {
-        return this.promiseBuilder_('GET', uriEndpoint, data);
+    _get(endpoint, data = null) {
+        return this._request('GET', endpoint, data);
     }
 };
