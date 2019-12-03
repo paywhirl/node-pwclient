@@ -300,7 +300,6 @@ module.exports = class PayWhirl {
         return this.postPromise_('/multiauth', data);
     }
 
-
     // private helper methods below this point
     requestHelper_(requestType, uriEndpoint, data = null) {
         let qs = '';
@@ -318,29 +317,15 @@ module.exports = class PayWhirl {
         };
 
         const request = new fetch.Request(host, init);
-        return fetch(request);
-    }
 
-
-    promiseBuilder_(requestType, uriEndpoint, data = null) {
-        const returnPromise = new Promise((resolved, failed) => {
-            this.requestHelper_(requestType, uriEndpoint, data)
-                .then((result) => {
-                    resolved(result.json());
-                })
-                .catch((error) => {
-                    failed(error);
-                });
-        });
-
-        return returnPromise;
+        return fetch(request).then(function(res) { return res.json(); });
     }
 
     postPromise_(uriEndpoint, data = null) {
-        return this.promiseBuilder_('POST', uriEndpoint, data);
+        return this.requestHelper_('POST', uriEndpoint, data);
     }
 
     getPromise_(uriEndpoint, data = null) {
-        return this.promiseBuilder_('GET', uriEndpoint, data);
+        return this.requestHelper_('GET', uriEndpoint, data);
     }
 };
