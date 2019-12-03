@@ -165,31 +165,31 @@ module.exports = class PayWhirl {
     }
 
     processInvoice(invoiceId = null, data = null) {
-        return this._post(`/invoices/${invoiceId}/process`, data);
+        return this._post(`/invoice/${invoiceId}/process`, data);
     }
 
     markInvoiceAsPaid(invoiceId = null) {
-        return this._post(`/invoices/${invoiceId}/mark-as-paid`);
+        return this._post(`/invoice/${invoiceId}/mark-as-paid`);
     }
 
     addPromoCodeToInvoice(invoiceId = null, promoCode = null) {
         const data = { promo_code: promoCode };
-        return this._post(`/invoices/${invoiceId}/add-promo`, data);
+        return this._post(`/invoice/${invoiceId}/add-promo`, data);
     }
 
     removePromoCodeFromInvoice(invoiceId = null) {
-        return this._post(`/invoices/${invoiceId}/remove-promo`);
+        return this._post(`/invoice/${invoiceId}/remove-promo`);
     }
 
     updateInvoiceCard(invoiceId = null, cardId = null) {
         const data = {
             card_id: cardId,
         };
-        return this._post(`/invoices/${invoiceId}/card`, data);
+        return this._post(`/invoice/${invoiceId}/card`, data);
     }
 
     updateInvoiceItems(invoiceId = null, lineItems = null) {
-        return this._post(`/invoices/${invoiceId}/items`, lineItems);
+        return this._post(`/invoice/${invoiceId}/items`, lineItems);
     }
 
     createInvoice(data = null) {
