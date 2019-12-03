@@ -301,27 +301,28 @@ module.exports = class PayWhirl {
 
     // private helper methods below this point
     _request(method, endpoint, data = null) {
-        let qs = '';
-        let host = this._host + endpoint;
-        if (data) {
-            qs = querystring.stringify(data);
-            host = `${host}?${qs}`;
-        }
+        const qs = data ? querystring.stringify(data) : null;
+        const path = (method === 'GET' && qs) ? `${endpoint}?${qs}` : endpoint;
+        const url = `${this._host}${path}`;
 
         const headers = new fetch.Headers();
         headers.append('api-key', this._apiKey);
         headers.append('api-secret', this._apiSecret);
+        if (method === 'POST') {
+            headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+        }
 
-        const init = {
-            method: method,
-            headers: headers,
+        const opts = {
+            method,
+            headers,
             port: this._port,
             agent: this._httpsAgent,
+            body: method === 'POST' ? qs : null,
         };
 
-        const request = new fetch.Request(host, init);
+        const request = new fetch.Request(url, opts);
 
-        return fetch(request).then(function(res) { return res.json(); });
+        return fetch(request).then((res) => res.json());
     }
 
     _post(endpoint, data = null) {
