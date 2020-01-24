@@ -54,7 +54,7 @@ const apiSecret = 'pwpsk_xxxxxxxxxxx';
 
 const paywhirl = new PayWhirl(apiKey, apiSecret);
 
-paywhirl.getAccount.then(console.log);
+paywhirl.getAccount().then(console.log);
 ```
 
 ## License
