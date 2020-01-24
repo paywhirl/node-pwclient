@@ -1,7 +1,10 @@
 {
-  "name": "pwclient",
-  "version": "1.0.0",
+  "name": "paywhirl",
+  "version": "1.2.0",
   "description": "JavaScript client for the PayWhirl API",
+  "homepage": "https://github.com/paywhirl/node-pwclient",
+  "author": "PayWhirl <developer@paywhirl.com> (https://paywhirl.com/)",
+  "license": "MIT",
   "main": "paywhirl.js",
   "dependencies": {
     "node-fetch": "^2.6.0",
@@ -19,10 +22,7 @@
     "type": "git",
     "url": "git+https://github.com/paywhirl/node-pwclient.git"
   },
-  "author": "PayWhirl",
-  "license": "MIT",
   "bugs": {
     "url": "https://github.com/paywhirl/node-pwclient/issues"
-  },
-  "homepage": "https://github.com/paywhirl/node-pwclient"
+  }
 }

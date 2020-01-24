@@ -7,11 +7,10 @@ The [Documentation] linked here and below contains all of the available methods
 for interacting with your PayWhirl account. If you would like to see additional 
 functionality added, feel free to submit an issue or a pull request.
 
-
-
   [PayWhirl]: https://app.paywhirl.com/
   [Node]: https://nodejs.org/en/
   [Documentation]: https://api.paywhirl.com/
+
 ### Usage Guide
 
 - [Documentation]
@@ -20,6 +19,7 @@ functionality added, feel free to submit an issue or a pull request.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [Usage](#usage)
 - [License](#license)
 - [About](#about)
 
@@ -29,24 +29,33 @@ functionality added, feel free to submit an issue or a pull request.
 
 ## Installation
 
-Place the `.js` file in your project and import the class so that you can 
-instantiate a PayWhirl object. 
+Install the package with NPM:
 
-When you create a new PayWhirl object you need to pass in your API key and 
-secret, which can be found in the [API key section of the main site](https://app.paywhirl.com/api-keys).
+```bash
+$ npm install paywhirl --save
 ```
-// include PayWhirl JavaScript SDK
-const PayWhirl = require('./paywhirl.js');
+
+Or Yarn:
+
+```bash
+$ yarn add paywhirl
+```
+
+## Usage
+
+To create a new PayWhirl object, you need to pass in your API key and 
+secret, which can be found in the [API key section of the main site](https://app.paywhirl.com/api-keys).
+
+```javascript
+const PayWhirl = require('paywhirl');
 
 const apiKey = 'pwpk_xxxxxxxxxxxxxxx';
 const apiSecret = 'pwpsk_xxxxxxxxxxx';
 
 const paywhirl = new PayWhirl(apiKey, apiSecret);
 
-
+paywhirl.getAccount.then(console.log);
 ```
-
-
 
 ## License
 
