@@ -193,7 +193,7 @@ module.exports = class PayWhirl {
     }
 
     createInvoice(data = null) {
-        return this._post('/invoices', data);
+        return this._post('/invoices', data, true);
     }
 
     deleteInvoice(invoiceID = null) {
@@ -300,16 +300,22 @@ module.exports = class PayWhirl {
     }
 
     // private helper methods below this point
-    _request(method, endpoint, data = null) {
+    _request(method, endpoint, data = null, json = false) {
         const qs = data ? querystring.stringify(data) : null;
         const path = (method === 'GET' && qs) ? `${endpoint}?${qs}` : endpoint;
+        const body = json ? JSON.stringify(data) : (method === 'POST' ? qs : null);
         const url = `${this._host}${path}`;
 
         const headers = new fetch.Headers();
         headers.append('api-key', this._apiKey);
         headers.append('api-secret', this._apiSecret);
+
         if (method === 'POST') {
-            headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+            if (json) {
+              headers.append('Content-Type', 'application/json');
+            } else {
+              headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+            }
         }
 
         const opts = {
@@ -317,7 +323,7 @@ module.exports = class PayWhirl {
             headers,
             port: this._port,
             agent: this._httpsAgent,
-            body: method === 'POST' ? qs : null,
+            body: body
         };
 
         const request = new fetch.Request(url, opts);
@@ -325,8 +331,8 @@ module.exports = class PayWhirl {
         return fetch(request).then((res) => res.json());
     }
 
-    _post(endpoint, data = null) {
-        return this._request('POST', endpoint, data);
+    _post(endpoint, data = null, json = false) {
+        return this._request('POST', endpoint, data, json);
     }
 
     _get(endpoint, data = null) {
