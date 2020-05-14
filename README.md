@@ -1,10 +1,10 @@
 ## A convenient PayWhirl API wrapper in JavaScript for Node
 
 The [PayWhirl] Node library is provided to allow developers to access PayWhirl
-services without needing to write their own API wrappers. 
+services without needing to write their own API wrappers.
 
-The [Documentation] linked here and below contains all of the available methods 
-for interacting with your PayWhirl account. If you would like to see additional 
+The [Documentation] linked here and below contains all of the available methods
+for interacting with your PayWhirl account. If you would like to see additional
 functionality added, feel free to submit an issue or a pull request.
 
   [PayWhirl]: https://app.paywhirl.com/
@@ -43,10 +43,12 @@ $ yarn add paywhirl
 
 ## Usage
 
-To create a new PayWhirl object, you need to pass in your API key and 
+To create a new PayWhirl object, you need to pass in your API key and
 secret, which can be found in the [API key section of the main site](https://app.paywhirl.com/api-keys).
 
 ```javascript
+// index.js
+
 const PayWhirl = require('paywhirl');
 
 const apiKey = 'pwpk_xxxxxxxxxxxxxxx';
@@ -56,6 +58,18 @@ const paywhirl = new PayWhirl(apiKey, apiSecret);
 
 paywhirl.getAccount().then(console.log);
 ```
+
+## Bundling
+
+If you need to create a single-file bundle, e.g. to deploy your code to certain serverless
+environments, a possible solution is to use [ncc](https://github.com/zeit/ncc):
+
+```bash
+$ npm install @zeit/ncc --save-dev
+$ npx ncc index.js -o dist/
+```
+
+Please note that PayWhirl is not associated with `ncc` and doesn't provide support for it.
 
 ## License
 
