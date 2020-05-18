@@ -53,6 +53,18 @@ module.exports = class PayWhirl {
         return this._get(`/customer/address/${addressId}`);
     }
 
+    createAddress(data) {
+        return this._post('/customer/address', data);
+    }
+
+    updateAddress(addressId, data) {
+        return this._patch(`/customer/address/${addressId}`, data);
+    }
+
+    deleteAddress(addressId) {
+        return this._delete(`/customer/address/${addressId}`);
+    }
+
     // return the full customer profile (customer, addresses, and profile questions)
     getProfile(customerId = null) {
         return this._get(`/customer/profile/${customerId}`);
@@ -303,18 +315,18 @@ module.exports = class PayWhirl {
     _request(method, endpoint, data = null, json = false) {
         const qs = data ? querystring.stringify(data) : null;
         const path = (method === 'GET' && qs) ? `${endpoint}?${qs}` : endpoint;
-        const body = json ? JSON.stringify(data) : (method === 'POST' ? qs : null);
+        const body = json ? JSON.stringify(data) : (method !== 'GET' ? qs : null);
         const url = `${this._host}${path}`;
 
         const headers = new fetch.Headers();
         headers.append('api-key', this._apiKey);
         headers.append('api-secret', this._apiSecret);
 
-        if (method === 'POST') {
+        if (method === 'POST' || method === 'PATCH' || method === 'DELETE') {
             if (json) {
-              headers.append('Content-Type', 'application/json');
+                headers.append('Content-Type', 'application/json');
             } else {
-              headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
+                headers.append('Content-Type', 'application/x-www-form-urlencoded;charset=UTF-8');
             }
         }
 
@@ -323,7 +335,7 @@ module.exports = class PayWhirl {
             headers,
             port: this._port,
             agent: this._httpsAgent,
-            body: body
+            body,
         };
 
         const request = new fetch.Request(url, opts);
@@ -333,6 +345,14 @@ module.exports = class PayWhirl {
 
     _post(endpoint, data = null, json = false) {
         return this._request('POST', endpoint, data, json);
+    }
+
+    _patch(endpoint, data = null, json = false) {
+        return this._request('PATCH', endpoint, data, json);
+    }
+
+    _delete(endpoint, data = null, json = false) {
+        return this._request('DELETE', endpoint, data, json);
     }
 
     _get(endpoint, data = null) {

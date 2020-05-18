@@ -18,5 +18,6 @@ module.exports = {
     rules: {
         indent: ['error', 4],
         'no-underscore-dangle': ['off'],
+        'no-nested-ternary': ['off'],
     },
 };
