@@ -121,8 +121,8 @@ module.exports = class PayWhirl {
         return this._post('/update/plan', data);
     }
 
-    getSubscriptions(customerId = null) {
-        return this._get(`/subscriptions/${customerId}`);
+    getSubscriptions(customerId = null, status = 'active') {
+        return this._get(`/subscriptions/${customerId}`, { status });
     }
 
     getSubscription(customerId = null) {
