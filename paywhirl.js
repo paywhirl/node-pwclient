@@ -168,8 +168,12 @@ module.exports = class PayWhirl {
         return this._post('/unsubscribe/customer', data);
     }
 
-    getInvoice(customerId = null) {
-        return this._get(`/invoice/${customerId}`);
+    getInvoice(invoiceId = null) {
+        return this._get(`/invoice/${invoiceId}`);
+    }
+
+    updateInvoiceNextPaymentAttempt(invoiceId, nextPaymentAttemptTimestamp) {
+        return this._post(`/invoices/${invoiceId}/next-payment-date`, { next_payment_attempt: nextPaymentAttemptTimestamp });
     }
 
     getInvoices(customerId = null, data = null) {
