@@ -172,8 +172,11 @@ module.exports = class PayWhirl {
         return this._get(`/invoice/${invoiceId}`);
     }
 
-    updateInvoiceNextPaymentAttempt(invoiceId, nextPaymentAttemptTimestamp) {
-        return this._post(`/invoices/${invoiceId}/next-payment-date`, { next_payment_attempt: nextPaymentAttemptTimestamp });
+    updateInvoiceNextPaymentAttempt(invoiceId, nextPaymentAttemptTimestamp, toAll = 0) {
+        return this._post(`/invoices/${invoiceId}/next-payment-date`, {
+            next_payment_attempt: nextPaymentAttemptTimestamp,
+            all: toAll
+        });
     }
 
     getInvoices(customerId = null, data = null) {
